@@ -1,0 +1,51 @@
+export const SITE_CONFIG = {
+  name: "Fairmont Château Laurier",
+  tagline: "Where History Meets Luxury",
+  domain: "fifahotel.com",
+  url: "https://fifahotel.com",
+  address: {
+    street: "1 Rideau Street",
+    city: "Ottawa",
+    province: "Ontario",
+    postalCode: "K1N 8S7",
+    country: "Canada",
+    full: "1 Rideau Street, Ottawa, Ontario K1N 8S7, Canada",
+  },
+  contact: {
+    phone: "+1 (613) 241-1414",
+    email: "support@fifahotel.com",
+    support: "support@fifahotel.com",
+    reservations: "support@fifahotel.com",
+    fax: "+1 (613) 562-7030",
+  },
+  social: {
+    instagram: "https://instagram.com/fairmontchateaulaurier",
+    facebook: "https://facebook.com/fairmontchateaulaurier",
+    twitter: "https://twitter.com/fairmontlaurier",
+    linkedin: "https://linkedin.com/company/fairmont-chateau-laurier",
+    youtube: "https://youtube.com/@fairmontchateaulaurier",
+  },
+  hours: {
+    frontDesk: "24 hours, 7 days a week",
+    spa: "6:00 AM – 10:00 PM",
+    restaurant: "6:30 AM – 10:30 PM",
+    bar: "12:00 PM – 2:00 AM",
+    pool: "6:00 AM – 10:00 PM",
+    fitness: "5:00 AM – 11:00 PM",
+  },
+  bankDetails: {
+    bankName: "Royal Bank of Canada (RBC)",
+    accountName: "Fairmont Château Laurier Inc.",
+    accountNumber: "XXXX-XXXX-XXXX",
+    routingNumber: "XXXXXXXXX",
+    swiftCode: "ROYCCAT2",
+    iban: "XXXXXXXXXXXXXXXXXX",
+    instructions:
+      "Please include your Booking Reference Number as the payment reference.",
+  },
+  meta: {
+    foundedYear: 1912,
+    stars: 5,
+    totalRooms: 429,
+  },
+};
