@@ -15,7 +15,7 @@ router.use(adminAuth);
 // ─── Dashboard Stats ──────────────────────────────────────────────────────────
 router.get("/stats", async (req, res, next) => {
   try {
-    const [bookings, revenue, rooms, pendingReceipts] = await Promise.all([
+    const [bookings, revenue, rooms, pendingReceipts, recentBookingsResult] = await Promise.all([
       pool.query(
         `SELECT COUNT(*) as total, status FROM bookings GROUP BY status`,
       ),
@@ -27,6 +27,13 @@ router.get("/stats", async (req, res, next) => {
       ),
       pool.query(
         `SELECT COUNT(*) as total FROM bookings WHERE status = 'pending_verification'`,
+      ),
+      pool.query(
+        `SELECT b.reference_number as reference,
+          (b.guest_first_name || ' ' || b.guest_last_name) as guest_name,
+          r.name as room_name, b.total_amount, b.status, b.created_at
+         FROM bookings b LEFT JOIN rooms r ON b.room_id = r.id
+         ORDER BY b.created_at DESC LIMIT 10`
       ),
     ]);
 
@@ -47,6 +54,7 @@ router.get("/stats", async (req, res, next) => {
       availableRooms: Number(rooms.rows[0].total),
       pendingVerification: Number(pendingReceipts.rows[0].total),
       bookingsByStatus,
+      recentBookings: recentBookingsResult.rows,
     });
   } catch (err) {
     next(err);
@@ -69,7 +77,13 @@ router.get("/bookings", async (req, res, next) => {
     query += ` ORDER BY b.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(Number(limit), Number(offset));
 
-    const { rows } = await pool.query(query, params);
+    const { rows } = await pool.query(query.replace(
+      "SELECT b.*, r.name as room_name",
+      `SELECT b.*, r.name as room_name,
+        b.reference_number as reference,
+        (b.guest_first_name || ' ' || b.guest_last_name) as guest_name,
+        b.payment_receipt_url as receipt_url`
+    ), params);
     res.json({ bookings: rows });
   } catch (err) {
     next(err);
