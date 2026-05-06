@@ -280,7 +280,10 @@ router.post(
       if (!req.file)
         return res.status(400).json({ error: "Receipt file is required." });
 
-      const receiptUrl = `/uploads/receipts/${req.file.filename}`;
+      const backendOrigin =
+        process.env.BACKEND_URL ||
+        `${req.protocol}://${req.get("host")}`;
+      const receiptUrl = `${backendOrigin}/uploads/receipts/${req.file.filename}`;
       const note = req.body.note || null;
 
       await pool.query(
