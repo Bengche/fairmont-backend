@@ -202,6 +202,25 @@ router.post(
   },
 );
 
+// GET /api/bookings/my  (alias for /user/mine)
+router.get("/my", authenticate, async (req, res, next) => {
+  try {
+    const { rows } = await pool.query(
+      `
+      SELECT b.*, r.name as room_name, r.images as room_images
+      FROM bookings b
+      LEFT JOIN rooms r ON b.room_id = r.id
+      WHERE b.guest_email = $1
+      ORDER BY b.created_at DESC
+    `,
+      [req.user.email],
+    );
+    res.json({ bookings: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
 // GET /api/bookings/user/mine
 router.get("/user/mine", authenticate, async (req, res, next) => {
   try {
