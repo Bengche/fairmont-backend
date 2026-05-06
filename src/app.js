@@ -36,6 +36,8 @@ app.use(
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://fifahotel.com",
+  "https://www.fifahotel.com",
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
   ...(process.env.FRONTEND_URL_WWW ? [process.env.FRONTEND_URL_WWW] : []),
 ];
