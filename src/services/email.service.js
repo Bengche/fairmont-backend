@@ -145,25 +145,34 @@ export const sendBookingReceived = async (booking, bankDetails) => {
     ${refBadge(booking.reference_number)}
     ${detailCard(
       detailRow("Room", booking.room_name) +
-      detailRow("Check-in", new Date(booking.check_in).toDateString()) +
-      detailRow("Check-out", new Date(booking.check_out).toDateString()) +
-      detailRow("Nights", booking.nights) +
-      detailRow("Guests", `${booking.adults} adult(s)${booking.children ? ", " + booking.children + " child(ren)" : ""}`) +
-      detailRow("Total Amount", `CAD $${Number(booking.total_amount).toFixed(2)}`)
+        detailRow("Check-in", new Date(booking.check_in).toDateString()) +
+        detailRow("Check-out", new Date(booking.check_out).toDateString()) +
+        detailRow("Nights", booking.nights) +
+        detailRow(
+          "Guests",
+          `${booking.adults} adult(s)${booking.children ? ", " + booking.children + " child(ren)" : ""}`,
+        ) +
+        detailRow(
+          "Total Amount",
+          `CAD $${Number(booking.total_amount).toFixed(2)}`,
+        ),
     )}
     ${divider()}
     ${h2("Payment Instructions", "28px")}
     ${para("To confirm your reservation, please transfer the full amount to the bank account below. Include your reference number as the payment description.")}
     ${detailCard(
       detailRow("Bank", bankDetails.bank_name) +
-      detailRow("Account Name", bankDetails.bank_account_name) +
-      detailRow("Account Number", bankDetails.bank_account_number) +
-      detailRow("Routing Number", bankDetails.bank_routing_number) +
-      detailRow("SWIFT Code", bankDetails.bank_swift) +
-      detailRow("Payment Reference", `<span style="color:#C9A84C;font-weight:700;">${booking.reference_number}</span>`)
+        detailRow("Account Name", bankDetails.bank_account_name) +
+        detailRow("Account Number", bankDetails.bank_account_number) +
+        detailRow("Routing Number", bankDetails.bank_routing_number) +
+        detailRow("SWIFT Code", bankDetails.bank_swift) +
+        detailRow(
+          "Payment Reference",
+          `<span style="color:#C9A84C;font-weight:700;">${booking.reference_number}</span>`,
+        ),
     )}
     ${para(`<strong>Note:</strong> ${bankDetails.bank_instructions}`)}
-    ${para("Once payment is complete, click <strong>\"I Have Paid\"</strong> on the booking site to upload your proof of payment. Your reservation will be confirmed within 24 hours.")}
+    ${para('Once payment is complete, click <strong>"I Have Paid"</strong> on the booking site to upload your proof of payment. Your reservation will be confirmed within 24 hours.')}
     ${para("Should you need assistance, contact us at <a href='mailto:support@fifahotel.com' style='color:#C9A84C;text-decoration:none;'>support@fifahotel.com</a>.", "margin-top:20px;")}
   `;
 
@@ -184,10 +193,13 @@ export const sendReceiptConfirmationToGuest = async (booking) => {
     ${para("Our team will verify your payment within <strong>24 hours</strong>. Once confirmed, you will receive a booking confirmation email with all details of your stay.")}
     ${detailCard(
       detailRow("Reference", booking.reference_number) +
-      detailRow("Room", booking.room_name) +
-      detailRow("Check-in", new Date(booking.check_in).toDateString()) +
-      detailRow("Check-out", new Date(booking.check_out).toDateString()) +
-      detailRow("Status", '<span style="color:#B8860B;font-weight:700;">Pending Verification</span>')
+        detailRow("Room", booking.room_name) +
+        detailRow("Check-in", new Date(booking.check_in).toDateString()) +
+        detailRow("Check-out", new Date(booking.check_out).toDateString()) +
+        detailRow(
+          "Status",
+          '<span style="color:#B8860B;font-weight:700;">Pending Verification</span>',
+        ),
     )}
     ${para("If you have any questions, please contact us at <a href='mailto:support@fifahotel.com' style='color:#C9A84C;text-decoration:none;'>support@fifahotel.com</a> quoting your reference number.")}
   `;
@@ -208,13 +220,16 @@ export const sendReceiptNotificationToSupport = async (booking, receiptUrl) => {
     ${para("A guest has uploaded proof of payment for the following booking. Please verify and confirm.")}
     ${detailCard(
       detailRow("Reference", booking.reference_number) +
-      detailRow("Guest", `${booking.guest_first_name} ${booking.guest_last_name}`) +
-      detailRow("Email", booking.guest_email) +
-      detailRow("Phone", booking.guest_phone) +
-      detailRow("Room", booking.room_name) +
-      detailRow("Check-in", new Date(booking.check_in).toDateString()) +
-      detailRow("Check-out", new Date(booking.check_out).toDateString()) +
-      detailRow("Total", `CAD $${Number(booking.total_amount).toFixed(2)}`)
+        detailRow(
+          "Guest",
+          `${booking.guest_first_name} ${booking.guest_last_name}`,
+        ) +
+        detailRow("Email", booking.guest_email) +
+        detailRow("Phone", booking.guest_phone) +
+        detailRow("Room", booking.room_name) +
+        detailRow("Check-in", new Date(booking.check_in).toDateString()) +
+        detailRow("Check-out", new Date(booking.check_out).toDateString()) +
+        detailRow("Total", `CAD $${Number(booking.total_amount).toFixed(2)}`),
     )}
     ${receiptUrl ? para(`<a href="${receiptUrl}" style="color:#C9A84C;">View uploaded payment receipt &rarr;</a>`) : ""}
     ${ctaButton(`${frontendUrl}/admin/bookings`, "Review in Admin Dashboard")}
@@ -237,11 +252,17 @@ export const sendBookingConfirmed = async (booking) => {
     ${refBadge(booking.reference_number)}
     ${detailCard(
       detailRow("Room", booking.room_name) +
-      detailRow("Check-in", new Date(booking.check_in).toDateString()) +
-      detailRow("Check-out", new Date(booking.check_out).toDateString()) +
-      detailRow("Nights", booking.nights) +
-      detailRow("Guests", `${booking.adults} adult(s)${booking.children ? ", " + booking.children + " child(ren)" : ""}`) +
-      detailRow("Total Paid", `CAD $${Number(booking.total_amount).toFixed(2)}`)
+        detailRow("Check-in", new Date(booking.check_in).toDateString()) +
+        detailRow("Check-out", new Date(booking.check_out).toDateString()) +
+        detailRow("Nights", booking.nights) +
+        detailRow(
+          "Guests",
+          `${booking.adults} adult(s)${booking.children ? ", " + booking.children + " child(ren)" : ""}`,
+        ) +
+        detailRow(
+          "Total Paid",
+          `CAD $${Number(booking.total_amount).toFixed(2)}`,
+        ),
     )}
     ${divider()}
     ${h2("Before You Arrive", "28px")}
@@ -268,8 +289,11 @@ export const sendBookingCancelled = async (booking) => {
     ${para(`Your reservation with reference <strong>${booking.reference_number}</strong> has been cancelled as requested.`)}
     ${detailCard(
       detailRow("Reference", booking.reference_number) +
-      detailRow("Room", booking.room_name) +
-      detailRow("Original Check-in", new Date(booking.check_in).toDateString())
+        detailRow("Room", booking.room_name) +
+        detailRow(
+          "Original Check-in",
+          new Date(booking.check_in).toDateString(),
+        ),
     )}
     ${para("If a refund is applicable under our cancellation policy, it will be processed within 7–10 business days. Please review our <a href='https://fifahotel.com/cancellation-policy' style='color:#C9A84C;text-decoration:none;'>Cancellation Policy</a> for details.")}
     ${para("We hope to welcome you to Fairmont Ch&acirc;teau Laurier on a future occasion.")}
@@ -294,8 +318,14 @@ export const sendWelcomeEmail = async (user) => {
     ${para("As a member, you earn points on every eligible stay. Points may be redeemed for complimentary nights, dining credits, and exclusive experiences.")}
     ${detailCard(
       detailRow("Silver", "Entry level — earn 1 point per CAD $1 spent") +
-      detailRow("Gold", "10 stays or 30 nights per year — earn 1.5 pts / $1") +
-      detailRow("Platinum", "25 stays or 75 nights per year — earn 2 pts / $1")
+        detailRow(
+          "Gold",
+          "10 stays or 30 nights per year — earn 1.5 pts / $1",
+        ) +
+        detailRow(
+          "Platinum",
+          "25 stays or 75 nights per year — earn 2 pts / $1",
+        ),
     )}
     ${para("We look forward to welcoming you to Ottawa's most celebrated address.")}
   `;
@@ -334,9 +364,9 @@ export const sendNewsletterWelcome = async (email) => {
     ${para("As a subscriber, you will be among the first to receive:")}
     ${detailCard(
       detailRow("&#9670;", "Seasonal offers and exclusive packages") +
-      detailRow("&#9670;", "Invitations to private events and galas") +
-      detailRow("&#9670;", "Travel inspiration and Ottawa guides") +
-      detailRow("&#9670;", "Early access to new dining and spa experiences")
+        detailRow("&#9670;", "Invitations to private events and galas") +
+        detailRow("&#9670;", "Travel inspiration and Ottawa guides") +
+        detailRow("&#9670;", "Early access to new dining and spa experiences"),
     )}
     ${para("We look forward to sharing the finest that Ottawa has to offer.")}
   `;

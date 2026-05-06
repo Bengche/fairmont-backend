@@ -19,4 +19,21 @@ router.get("/bank-details", async (req, res, next) => {
   }
 });
 
+// GET /api/config/min-nights — returns effective min nights for a given date (defaults to today)
+router.get("/min-nights", async (req, res, next) => {
+  try {
+    const date = req.query.date || new Date().toISOString().split("T")[0];
+    const { rows } = await pool.query(
+      `SELECT min_nights FROM seasonal_min_nights
+       WHERE is_active = TRUE AND start_date <= $1 AND end_date >= $1
+       ORDER BY min_nights DESC LIMIT 1`,
+      [date],
+    );
+    const seasonalMin = rows[0]?.min_nights || 1;
+    res.json({ minNights: seasonalMin });
+  } catch (err) {
+    next(err);
+  }
+});
+
 export default router;

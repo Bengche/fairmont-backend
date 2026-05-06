@@ -15,27 +15,28 @@ router.use(adminAuth);
 // ─── Dashboard Stats ──────────────────────────────────────────────────────────
 router.get("/stats", async (req, res, next) => {
   try {
-    const [bookings, revenue, rooms, pendingReceipts, recentBookingsResult] = await Promise.all([
-      pool.query(
-        `SELECT COUNT(*) as total, status FROM bookings GROUP BY status`,
-      ),
-      pool.query(
-        `SELECT COALESCE(SUM(total_amount),0) as total FROM bookings WHERE status IN ('confirmed','checked_in','checked_out')`,
-      ),
-      pool.query(
-        `SELECT COUNT(*) as total FROM rooms WHERE is_available = true`,
-      ),
-      pool.query(
-        `SELECT COUNT(*) as total FROM bookings WHERE status = 'pending_verification'`,
-      ),
-      pool.query(
-        `SELECT b.reference_number as reference,
+    const [bookings, revenue, rooms, pendingReceipts, recentBookingsResult] =
+      await Promise.all([
+        pool.query(
+          `SELECT COUNT(*) as total, status FROM bookings GROUP BY status`,
+        ),
+        pool.query(
+          `SELECT COALESCE(SUM(total_amount),0) as total FROM bookings WHERE status IN ('confirmed','checked_in','checked_out')`,
+        ),
+        pool.query(
+          `SELECT COUNT(*) as total FROM rooms WHERE is_available = true`,
+        ),
+        pool.query(
+          `SELECT COUNT(*) as total FROM bookings WHERE status = 'pending_verification'`,
+        ),
+        pool.query(
+          `SELECT b.reference_number as reference,
           (b.guest_first_name || ' ' || b.guest_last_name) as guest_name,
           r.name as room_name, b.total_amount, b.status, b.created_at
          FROM bookings b LEFT JOIN rooms r ON b.room_id = r.id
-         ORDER BY b.created_at DESC LIMIT 10`
-      ),
-    ]);
+         ORDER BY b.created_at DESC LIMIT 10`,
+        ),
+      ]);
 
     const bookingsByStatus = {};
     bookings.rows.forEach((r) => {
@@ -77,13 +78,16 @@ router.get("/bookings", async (req, res, next) => {
     query += ` ORDER BY b.created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
     params.push(Number(limit), Number(offset));
 
-    const { rows } = await pool.query(query.replace(
-      "SELECT b.*, r.name as room_name",
-      `SELECT b.*, r.name as room_name,
+    const { rows } = await pool.query(
+      query.replace(
+        "SELECT b.*, r.name as room_name",
+        `SELECT b.*, r.name as room_name,
         b.reference_number as reference,
         (b.guest_first_name || ' ' || b.guest_last_name) as guest_name,
-        b.payment_receipt_url as receipt_url`
-    ), params);
+        b.payment_receipt_url as receipt_url`,
+      ),
+      params,
+    );
     res.json({ bookings: rows });
   } catch (err) {
     next(err);
@@ -517,6 +521,88 @@ router.get("/users", async (req, res, next) => {
       "SELECT id, first_name, last_name, email, role, loyalty_tier, loyalty_points, created_at FROM users ORDER BY created_at DESC",
     );
     res.json({ users: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// ─── Seasonal Minimum Nights ─────────────────────────────────────────────────
+router.get("/min-nights", async (req, res, next) => {
+  try {
+    const { rows } = await pool.query(
+      "SELECT * FROM seasonal_min_nights ORDER BY start_date ASC",
+    );
+    res.json({ rules: rows });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post(
+  "/min-nights",
+  [
+    body("name").trim().notEmpty().withMessage("Name is required."),
+    body("min_nights")
+      .isInt({ min: 1, max: 30 })
+      .withMessage("min_nights must be between 1 and 30."),
+    body("start_date").isDate().withMessage("Valid start_date required."),
+    body("end_date").isDate().withMessage("Valid end_date required."),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() });
+
+      const { name, min_nights, start_date, end_date, is_active = true } = req.body;
+      const { rows } = await pool.query(
+        `INSERT INTO seasonal_min_nights (name, min_nights, start_date, end_date, is_active)
+         VALUES ($1, $2, $3, $4, $5) RETURNING *`,
+        [name, min_nights, start_date, end_date, is_active],
+      );
+      res.status(201).json({ rule: rows[0] });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.put(
+  "/min-nights/:id",
+  [
+    body("name").trim().notEmpty().withMessage("Name is required."),
+    body("min_nights")
+      .isInt({ min: 1, max: 30 })
+      .withMessage("min_nights must be between 1 and 30."),
+    body("start_date").isDate().withMessage("Valid start_date required."),
+    body("end_date").isDate().withMessage("Valid end_date required."),
+  ],
+  async (req, res, next) => {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() });
+
+      const { name, min_nights, start_date, end_date, is_active } = req.body;
+      await pool.query(
+        `UPDATE seasonal_min_nights
+         SET name=$1, min_nights=$2, start_date=$3, end_date=$4, is_active=$5, updated_at=NOW()
+         WHERE id=$6`,
+        [name, min_nights, start_date, end_date, is_active !== false, req.params.id],
+      );
+      res.json({ message: "Rule updated." });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
+router.delete("/min-nights/:id", async (req, res, next) => {
+  try {
+    await pool.query("DELETE FROM seasonal_min_nights WHERE id = $1", [
+      req.params.id,
+    ]);
+    res.json({ message: "Rule deleted." });
   } catch (err) {
     next(err);
   }

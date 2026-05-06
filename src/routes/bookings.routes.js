@@ -53,7 +53,22 @@ router.post(
         user_id,
       } = req.body;
 
-      const dateCheck = validateBookingDates(check_in, check_out);
+      // Determine effective minimum nights (seasonal rule overrides room default)
+      const { rows: seasonalRules } = await pool.query(
+        `SELECT min_nights FROM seasonal_min_nights
+         WHERE is_active = TRUE AND start_date <= $1 AND end_date >= $1
+         ORDER BY min_nights DESC LIMIT 1`,
+        [check_in],
+      );
+      const { rows: roomMinRows } = await pool.query(
+        "SELECT COALESCE(min_nights, 1) as min_nights FROM rooms WHERE id = $1",
+        [room_id],
+      );
+      const roomMin = roomMinRows[0]?.min_nights || 1;
+      const seasonalMin = seasonalRules[0]?.min_nights || 1;
+      const effectiveMin = Math.max(roomMin, seasonalMin);
+
+      const dateCheck = validateBookingDates(check_in, check_out, effectiveMin);
       if (!dateCheck.valid)
         return res.status(400).json({ error: dateCheck.message });
 
@@ -281,8 +296,7 @@ router.post(
         return res.status(400).json({ error: "Receipt file is required." });
 
       const backendOrigin =
-        process.env.BACKEND_URL ||
-        `${req.protocol}://${req.get("host")}`;
+        process.env.BACKEND_URL || `${req.protocol}://${req.get("host")}`;
       const receiptUrl = `${backendOrigin}/uploads/receipts/${req.file.filename}`;
       const note = req.body.note || null;
 

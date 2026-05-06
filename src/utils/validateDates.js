@@ -1,4 +1,4 @@
-export const validateBookingDates = (checkIn, checkOut) => {
+export const validateBookingDates = (checkIn, checkOut, minNights = 1) => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
@@ -22,8 +22,11 @@ export const validateBookingDates = (checkIn, checkOut) => {
 
   const nights = Math.round((outDate - inDate) / (1000 * 60 * 60 * 24));
 
-  if (nights < 3) {
-    return { valid: false, message: "Minimum stay is 3 nights." };
+  if (nights < minNights) {
+    return {
+      valid: false,
+      message: `Minimum stay is ${minNights} night${minNights > 1 ? "s" : ""}.`,
+    };
   }
 
   return { valid: true, nights };
