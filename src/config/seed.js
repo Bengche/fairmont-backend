@@ -24,12 +24,12 @@ const seed = async () => {
     // Site config — bank details as single source of truth in DB
     await client.query(`
       INSERT INTO site_config (key, value) VALUES
-        ('bank_name', 'Royal Bank of Canada (RBC)'),
-        ('bank_account_name', 'Fairmont Château Laurier Inc.'),
+        ('bank_name', 'JPMorgan Chase'),
+        ('bank_account_name', 'Moxy NYC Times Square LLC'),
         ('bank_account_number', '0042-1234567'),
-        ('bank_routing_number', '003000420'),
-        ('bank_swift', 'ROYCCAT2'),
-        ('bank_iban', 'CA00ROYC00300042123456'),
+        ('bank_routing_number', '021000021'),
+        ('bank_swift', 'CHASUS33'),
+        ('bank_iban', 'US00CHAS00210000210000000'),
         ('bank_instructions', 'Please include your Booking Reference Number as the payment reference. Transfers typically take 1–2 business days.')
       ON CONFLICT (key) DO NOTHING;
     `);
@@ -39,7 +39,7 @@ const seed = async () => {
     await client.query(
       `
       INSERT INTO users (first_name, last_name, email, password_hash, role, email_verified)
-      VALUES ('Admin', 'Fairmont', 'admin@fifahotel.com', $1, 'admin', true)
+      VALUES ('Admin', 'Moxy', 'admin@fifahotel.com', $1, 'admin', true)
       ON CONFLICT (email) DO NOTHING;
     `,
       [adminHash],
@@ -51,7 +51,7 @@ const seed = async () => {
         ('Classic Room', 'classic', 'Elegantly appointed rooms with timeless décor and modern amenities.', 1),
         ('Deluxe Room', 'deluxe', 'Spacious rooms with premium furnishings and enhanced views.', 2),
         ('Junior Suite', 'junior-suite', 'Generous suites with a separate living area and luxurious appointments.', 3),
-        ('Grand Suite', 'grand-suite', 'Expansive suites offering the pinnacle of castle-inspired luxury.', 4),
+        ('Grand Suite', 'grand-suite', 'Expansive suites offering the pinnacle of Manhattan luxury.', 4),
         ('Presidential Suite', 'presidential-suite', 'Our most exclusive offering — a masterpiece of space, elegance and service.', 5)
       ON CONFLICT (slug) DO NOTHING;
     `);
@@ -74,7 +74,7 @@ const seed = async () => {
         short_description:
           "A refined retreat with castle views and heritage furnishings.",
         description:
-          "Steeped in the history of Fairmont Château Laurier, the Classic Heritage Room offers a serene escape with hand-crafted furnishings, plush bedding and refined details at every turn. City or courtyard views frame your stay within the heart of Ottawa.",
+          "Steeped in the history of Moxy NYC Times Square, the Classic Heritage Room offers a serene escape with hand-crafted furnishings, plush bedding and refined details at every turn. City or courtyard views frame your stay within the heart of Times Square.",
         price_per_night: 389,
         max_occupancy: 2,
         adults: 2,
@@ -121,25 +121,25 @@ const seed = async () => {
       },
       {
         category_slug: "classic",
-        name: "Classic Canal View Room",
-        slug: "classic-canal-view-room",
+        name: "Classic City View Room",
+        slug: "classic-city-view-room",
         short_description:
-          "Wake to panoramic views of the UNESCO-listed Rideau Canal.",
+          "Wake to panoramic views of the iconic Manhattan skyline.",
         description:
-          "Positioned to capture the timeless beauty of the Rideau Canal, this room pairs heritage interiors with sweeping waterway views. The Rideau Canal, a UNESCO World Heritage Site, provides a living canvas that changes with every season.",
+          "Positioned to capture the breathtaking beauty of the Manhattan skyline, this room pairs contemporary interiors with sweeping cityscape views. New York City's iconic skyline provides a living canvas that dazzles from sunrise to the glittering lights of the evening.",
         price_per_night: 429,
         max_occupancy: 2,
         adults: 2,
         children: 0,
         size_sqft: 330,
         floor_level: "Floors 5–8",
-        view_type: "Rideau Canal View",
+        view_type: "City Skyline View",
         bed_type: "King",
         bathroom_type: "Marble bathroom with soaking tub and walk-in shower",
         features: [
           "330 sq ft",
           "King Bed",
-          "Rideau Canal View",
+          "City Skyline View",
           "Marble Bathroom",
           "Soaking Tub",
           "Walk-in Shower",
@@ -168,26 +168,26 @@ const seed = async () => {
       },
       {
         category_slug: "deluxe",
-        name: "Deluxe Parliament View Room",
-        slug: "deluxe-parliament-view-room",
+        name: "Deluxe Times Square View Room",
+        slug: "deluxe-times-square-view-room",
         short_description:
-          "Iconic views of Parliament Hill from a superbly appointed deluxe room.",
+          "Iconic views of Times Square from a superbly appointed deluxe room.",
         description:
-          "Few hotel rooms in Canada command views as iconic as this. The Deluxe Parliament View Room faces Ottawa's Parliament Hill directly, offering a dramatic backdrop to your stay. Upgraded furnishings, premium linens, and enhanced amenities elevate the experience.",
+          "Few hotel rooms in New York command views as iconic as this. The Deluxe Times Square View Room faces the electric heart of Times Square directly, offering a dramatic backdrop to your stay. Upgraded furnishings, premium linens, and enhanced amenities elevate the experience.",
         price_per_night: 519,
         max_occupancy: 2,
         adults: 2,
         children: 0,
         size_sqft: 380,
         floor_level: "Floors 6–10",
-        view_type: "Parliament Hill View",
+        view_type: "Times Square View",
         bed_type: "King",
         bathroom_type:
           "Italian marble bathroom with dual vanity, deep soaking tub and separate rain shower",
         features: [
           "380 sq ft",
           "King Bed",
-          "Parliament Hill View",
+          "Times Square View",
           "Italian Marble Bathroom",
           "Dual Vanity",
           "Soaking Tub",
@@ -222,12 +222,12 @@ const seed = async () => {
       },
       {
         category_slug: "deluxe",
-        name: "Deluxe Fairmont Room",
-        slug: "deluxe-fairmont-room",
+        name: "Deluxe Moxy Room",
+        slug: "deluxe-moxy-room",
         short_description:
           "Our signature Deluxe offering with enhanced space and premium comforts.",
         description:
-          "The Deluxe Fairmont Room represents the quintessential château experience — spacious, beautifully appointed, and finished with the hallmark details that define the Fairmont standard. Enhanced square footage allows for a more generous layout and gracious living space.",
+          "The Deluxe Moxy Room represents the quintessential Moxy NYC experience — spacious, beautifully appointed, and finished with the hallmark details that define the Moxy standard. Enhanced square footage allows for a more generous layout and gracious living space.",
         price_per_night: 479,
         max_occupancy: 3,
         adults: 2,
@@ -276,7 +276,7 @@ const seed = async () => {
         name: "Junior Suite",
         slug: "junior-suite",
         short_description:
-          "A well-proportioned suite with a defined living area and signature Fairmont service.",
+          "A well-proportioned suite with a defined living area and signature Moxy service.",
         description:
           "The Junior Suite offers a harmonious blend of bedroom and living space, providing guests with room to relax and recharge in true luxury. Rich draperies, bespoke furniture pieces and meticulous craftsmanship define the character of these spacious retreats.",
         price_per_night: 749,
@@ -285,7 +285,7 @@ const seed = async () => {
         children: 1,
         size_sqft: 620,
         floor_level: "Floors 5–9",
-        view_type: "City or Canal View",
+        view_type: "City or Skyline View",
         bed_type: "King",
         bathroom_type:
           "Luxury marble bathroom with dual vanity, deep soaking tub, walk-in rain shower and heated floors",
@@ -293,7 +293,7 @@ const seed = async () => {
           "620 sq ft",
           "King Bed",
           "Separate Living Area",
-          "City or Canal View",
+          "City or Skyline View",
           "Heated Marble Floors",
           "Dual Vanity",
           "Deep Soaking Tub",
@@ -333,19 +333,19 @@ const seed = async () => {
       },
       {
         category_slug: "grand-suite",
-        name: "Grand Fairmont Suite",
-        slug: "grand-fairmont-suite",
+        name: "Grand Moxy Suite",
+        slug: "grand-moxy-suite",
         short_description:
-          "The Grand Fairmont Suite — an incomparable standard in castle luxury.",
+          "The Grand Moxy Suite — an incomparable standard in Manhattan luxury.",
         description:
-          "Every aspect of the Grand Fairmont Suite has been conceived with reverence for the château's storied past and an unwavering commitment to contemporary luxury. A full living room, private dining area, and master bedroom form a self-contained world of refinement within Ottawa's most celebrated building.",
+          "Every aspect of the Grand Moxy Suite has been conceived with reverence for Moxy NYC's bold spirit and an unwavering commitment to contemporary luxury. A full living room, private dining area, and master bedroom form a self-contained world of refinement within New York's most vibrant address.",
         price_per_night: 1250,
         max_occupancy: 4,
         adults: 3,
         children: 1,
         size_sqft: 1100,
         floor_level: "Floors 8–11",
-        view_type: "Parliament Hill and Canal Panoramic View",
+        view_type: "Times Square and Manhattan Panoramic View",
         bed_type: "King",
         bathroom_type:
           "Two full marble bathrooms, master bath with freestanding soaking tub, dual rain showers and heated floors",
@@ -354,7 +354,7 @@ const seed = async () => {
           "King Bed",
           "Full Living Room",
           "Private Dining Area",
-          "Parliament & Canal Views",
+          "Times Square & Manhattan Views",
           "2 Full Marble Bathrooms",
           "Freestanding Soaking Tub",
           "Dual Rain Showers",
@@ -396,9 +396,9 @@ const seed = async () => {
         name: "Presidential Suite",
         slug: "presidential-suite",
         short_description:
-          "Ottawa's most prestigious address — an entire floor of unparalleled grandeur.",
+          "New York's most prestigious address — an entire floor of unparalleled grandeur.",
         description:
-          "The Presidential Suite at Fairmont Château Laurier is not merely a room — it is an event. Occupying a commanding position within the château, this masterpiece of design and hospitality has hosted heads of state, royalty, and the world's most discerning guests. Three bedrooms, a grand reception room, a private library, and sweeping panoramic views of Parliament Hill, the Rideau Canal and the Ottawa River define this extraordinary residence.",
+          "The Presidential Suite at Moxy NYC Times Square is not merely a room — it is an event. Occupying a commanding position within the hotel, this masterpiece of design and hospitality has hosted heads of state, royalty, and the world's most discerning guests. Three bedrooms, a grand reception room, a private library, and sweeping panoramic views of Times Square, the Hudson River and the glittering Manhattan skyline define this extraordinary residence.",
         price_per_night: 4500,
         max_occupancy: 6,
         adults: 4,
@@ -406,7 +406,7 @@ const seed = async () => {
         size_sqft: 3200,
         floor_level: "Top Floor",
         view_type:
-          "360° Panoramic — Parliament Hill, Rideau Canal, Ottawa River",
+          "360° Panoramic — Times Square, Hudson River, Central Park",
         bed_type: "Three King Bedrooms",
         bathroom_type:
           "Three full luxury marble bathrooms, master bath with two freestanding soaking tubs, his-and-hers rain showers, and heated stone floors",
@@ -464,9 +464,9 @@ const seed = async () => {
         name: "Classic Twin Room",
         slug: "classic-twin-room",
         short_description:
-          "Two plush beds, heritage décor and all the hallmarks of château comfort.",
+          "Two plush beds, contemporary décor and all the hallmarks of Moxy NYC comfort.",
         description:
-          "Ideal for travelling companions or families, the Classic Twin Room delivers the Fairmont heritage experience with two full double beds dressed in premium linens, château-inspired furnishings and city views. Thoughtfully designed with extra wardrobe space and dual vanity lighting.",
+          "Ideal for travelling companions or families, the Classic Twin Room delivers the Moxy NYC experience with two full double beds dressed in premium linens, designer furnishings and city views. Thoughtfully designed with extra wardrobe space and dual vanity lighting.",
         price_per_night: 399,
         max_occupancy: 3,
         adults: 2,
@@ -510,9 +510,9 @@ const seed = async () => {
         name: "Classic Corner Room",
         slug: "classic-corner-room",
         short_description:
-          "A coveted corner position delivers dual-aspect views over the capital.",
+          "A coveted corner position delivers dual-aspect views over the city.",
         description:
-          "The Classic Corner Room benefits from a privileged position at the building's corner, offering dual-aspect windows with sweeping views across Ottawa's skyline. Natural light floods the room throughout the day, enhancing the warm tones of the heritage-inspired interior.",
+          "The Classic Corner Room benefits from a privileged position at the building's corner, offering dual-aspect windows with sweeping views across Manhattan's skyline. Natural light floods the room throughout the day, enhancing the warm tones of the heritage-inspired interior.",
         price_per_night: 449,
         max_occupancy: 2,
         adults: 2,
@@ -557,9 +557,9 @@ const seed = async () => {
         name: "Classic Garden Court Room",
         slug: "classic-garden-court-room",
         short_description:
-          "Tranquil and serene — a peaceful retreat facing the château's inner courtyard.",
+          "Tranquil and serene — a peaceful retreat facing the hotel's inner courtyard.",
         description:
-          "For guests who seek quiet over spectacle, the Classic Garden Court Room offers a serene setting away from the city's pulse. Overlooking the château's private inner courtyard, this room invites genuine rest with its muted palette, soft lighting and meticulous attention to comfort.",
+          "For guests who seek quiet over spectacle, the Classic Garden Court Room offers a serene setting away from the city's pulse. Overlooking the hotel's private inner courtyard, this room invites genuine rest with its muted palette, soft lighting and meticulous attention to comfort.",
         price_per_night: 369,
         max_occupancy: 2,
         adults: 2,
@@ -602,9 +602,9 @@ const seed = async () => {
         name: "Classic Accessible Room",
         slug: "classic-accessible-room",
         short_description:
-          "Full Fairmont luxury thoughtfully designed for accessibility and comfort.",
+          "Full Moxy luxury thoughtfully designed for accessibility and comfort.",
         description:
-          "The Classic Accessible Room ensures every guest experiences the full warmth of Fairmont hospitality. Designed in close collaboration with accessibility specialists, this room offers roll-in shower, widened doorways, lowered fixtures and all the premium amenities of our Classic collection — without compromise.",
+          "The Classic Accessible Room ensures every guest experiences the full warmth of Moxy hospitality. Designed in close collaboration with accessibility specialists, this room offers roll-in shower, widened doorways, lowered fixtures and all the premium amenities of our Classic collection — without compromise.",
         price_per_night: 389,
         max_occupancy: 2,
         adults: 2,
@@ -648,26 +648,26 @@ const seed = async () => {
       // ── ADDITIONAL DELUXE ROOMS ───────────────────────────────────
       {
         category_slug: "deluxe",
-        name: "Deluxe Canal View Room",
-        slug: "deluxe-canal-view-room",
+        name: "Deluxe Skyline View Room",
+        slug: "deluxe-skyline-view-room",
         short_description:
-          "Premium Deluxe appointments meet the timeless beauty of the Rideau Canal.",
+          "Premium Deluxe appointments meet the breathtaking Manhattan skyline.",
         description:
-          "Combining the elevated finishes of our Deluxe collection with coveted Rideau Canal views, this room is among the most sought-after in the hotel. In summer, watch cyclists and kayakers below; in winter, witness the world's longest naturally frozen skating rink take shape.",
+          "Combining the elevated finishes of our Deluxe collection with coveted Manhattan skyline views, this room is among the most sought-after in the hotel. By day, watch the city pulse with energy below; by night, witness the iconic lights of the New York skyline come alive.",
         price_per_night: 559,
         max_occupancy: 2,
         adults: 2,
         children: 0,
         size_sqft: 390,
         floor_level: "Floors 6–10",
-        view_type: "Rideau Canal View",
+        view_type: "Manhattan Skyline View",
         bed_type: "King",
         bathroom_type:
           "Italian marble bathroom with dual vanity, soaking tub and rain shower",
         features: [
           "390 sq ft",
           "King Bed",
-          "Rideau Canal View",
+          "Manhattan Skyline View",
           "Italian Marble Bathroom",
           "Dual Vanity",
           "Soaking Tub",
@@ -704,14 +704,14 @@ const seed = async () => {
         short_description:
           "A sprawling corner position with dual panoramic views and suite-level finishes.",
         description:
-          "The Deluxe Corner Suite occupies one of the most architecturally significant positions in the château. Wrap-around views capture both Parliament Hill and the Rideau Canal simultaneously, while the enlarged footprint creates a genuinely suite-like living experience within the Deluxe category.",
+          "The Deluxe Corner Suite occupies one of the most sought-after positions in the hotel. Wrap-around views capture both Times Square and the Manhattan skyline simultaneously, while the enlarged footprint creates a genuinely suite-like living experience within the Deluxe category.",
         price_per_night: 599,
         max_occupancy: 3,
         adults: 2,
         children: 1,
         size_sqft: 480,
         floor_level: "Floors 7–10",
-        view_type: "Parliament Hill & Canal Panoramic",
+        view_type: "Times Square & Manhattan Panoramic",
         bed_type: "King",
         bathroom_type:
           "Oversized marble bathroom with freestanding tub and separate walk-in shower",
@@ -800,19 +800,19 @@ const seed = async () => {
       // ── ADDITIONAL JUNIOR SUITES ──────────────────────────────────
       {
         category_slug: "junior-suite",
-        name: "Junior Canal Suite",
-        slug: "junior-canal-suite",
+        name: "Junior Skyline Suite",
+        slug: "junior-skyline-suite",
         short_description:
-          "A beautifully proportioned suite commanding unobstructed Rideau Canal views.",
+          "A beautifully proportioned suite commanding unobstructed Manhattan skyline views.",
         description:
-          "The Junior Canal Suite presents an exceptional marriage of living space and scenery. A distinct seating area faces floor-to-ceiling windows overlooking the Rideau Canal, while the bedroom's refined appointments — including a custom king bed, premium art and bespoke lighting — create an atmosphere of quiet luxury.",
+          "The Junior Skyline Suite presents an exceptional marriage of living space and scenery. A distinct seating area faces floor-to-ceiling windows overlooking the Manhattan skyline, while the bedroom's refined appointments — including a custom king bed, premium art and bespoke lighting — create an atmosphere of quiet luxury.",
         price_per_night: 849,
         max_occupancy: 3,
         adults: 2,
         children: 1,
         size_sqft: 680,
         floor_level: "Floors 6–9",
-        view_type: "Rideau Canal View",
+        view_type: "Manhattan Skyline View",
         bed_type: "King",
         bathroom_type:
           "Luxury marble bathroom with dual rainfall showers, freestanding tub and heated floors",
@@ -820,7 +820,7 @@ const seed = async () => {
           "680 sq ft",
           "King Bed",
           "Separate Living Area",
-          "Rideau Canal View",
+          "Manhattan Skyline View",
           "Dual Rainfall Showers",
           "Freestanding Tub",
           "Heated Floors",
@@ -854,19 +854,19 @@ const seed = async () => {
       },
       {
         category_slug: "junior-suite",
-        name: "Junior Parliament Suite",
-        slug: "junior-parliament-suite",
+        name: "Junior Times Square Suite",
+        slug: "junior-times-square-suite",
         short_description:
-          "Suite-level opulence with a front-row seat to Parliament Hill.",
+          "Suite-level opulence with a front-row seat to Times Square.",
         description:
-          "Facing Parliament Hill directly, the Junior Parliament Suite frames one of Canada's most celebrated views from a suite-sized living space. The distinct lounge area invites leisurely mornings, while the master bedroom — furnished with a bespoke king bed and custom draperies — ensures deeply restorative sleep.",
+          "Facing Times Square directly, the Junior Times Square Suite frames one of New York's most celebrated views from a suite-sized living space. The distinct lounge area invites leisurely mornings, while the master bedroom — furnished with a bespoke king bed and custom draperies — ensures deeply restorative sleep.",
         price_per_night: 899,
         max_occupancy: 3,
         adults: 2,
         children: 1,
         size_sqft: 700,
         floor_level: "Floors 7–10",
-        view_type: "Parliament Hill View",
+        view_type: "Times Square View",
         bed_type: "King",
         bathroom_type:
           "Italian marble bathroom with freestanding soaking tub, double rain shower and integrated steam",
@@ -874,7 +874,7 @@ const seed = async () => {
           "700 sq ft",
           "King Bed",
           "Separate Living Area",
-          "Parliament Hill View",
+          "Times Square View",
           "Steam Shower",
           "Freestanding Soaking Tub",
           "Double Rain Shower",
@@ -909,26 +909,26 @@ const seed = async () => {
       },
       {
         category_slug: "junior-suite",
-        name: "Junior Fairmont Gold Suite",
-        slug: "junior-fairmont-gold-suite",
+        name: "Junior Moxy Gold Suite",
+        slug: "junior-moxy-gold-suite",
         short_description:
-          "Exclusive Fairmont Gold floor access with dedicated lounge and concierge.",
+          "Exclusive Moxy Gold floor access with dedicated lounge and concierge.",
         description:
-          "The Junior Fairmont Gold Suite unlocks access to the exclusive Fairmont Gold private floor — a world of discreet luxury with a dedicated lounge, personalised check-in, curated breakfast and evening receptions. The suite itself combines a generous living area with the Fairmont Gold standard of bespoke appointment.",
+          "The Junior Moxy Gold Suite unlocks access to the exclusive Moxy Gold private floor — a world of discreet luxury with a dedicated lounge, personalised check-in, curated breakfast and evening receptions. The suite itself combines a generous living area with the Moxy Gold standard of bespoke appointment.",
         price_per_night: 1050,
         max_occupancy: 2,
         adults: 2,
         children: 0,
         size_sqft: 720,
-        floor_level: "Fairmont Gold Floor (Floor 11)",
-        view_type: "City & Canal View",
+        floor_level: "Moxy Gold Floor (Floor 11)",
+        view_type: "City & Skyline View",
         bed_type: "King",
         bathroom_type:
           "Signature marble bathroom with deep soaking tub, walk-in rain shower, dual vanity and heated floors",
         features: [
           "720 sq ft",
           "King Bed",
-          "Fairmont Gold Floor Access",
+          "Moxy Gold Floor Access",
           "Private Gold Lounge",
           "Personalised Check-in",
           "Daily Breakfast Included",
@@ -954,7 +954,7 @@ const seed = async () => {
           "Complimentary Wi-Fi",
           "Pillow Menu",
           "Robes & Slippers",
-          "Fairmont Gold Lounge",
+          "Moxy Gold Lounge",
           "Personalised Butler",
           "Daily Breakfast",
           "Evening Reception",
@@ -970,19 +970,19 @@ const seed = async () => {
       // ── ADDITIONAL GRAND SUITES ───────────────────────────────────
       {
         category_slug: "grand-suite",
-        name: "Grand Canal Suite",
-        slug: "grand-canal-suite",
+        name: "Grand Skyline Suite",
+        slug: "grand-skyline-suite",
         short_description:
-          "A grand residence poised above the Rideau Canal with floor-to-ceiling panoramas.",
+          "A grand residence poised above Manhattan with floor-to-ceiling panoramas.",
         description:
-          "The Grand Canal Suite is among the most photographed in Ottawa. Its double-height windows span the full width of the canal-facing façade, creating a living panorama through every season. The suite's grand proportions accommodate a full dining table, two seating areas and a master bedroom of regal refinement.",
+          "The Grand Skyline Suite is among the most photographed in New York. Its double-height windows span the full width of the skyline-facing façade, creating a living panorama at every hour of the day. The suite's grand proportions accommodate a full dining table, two seating areas and a master bedroom of regal refinement.",
         price_per_night: 1450,
         max_occupancy: 4,
         adults: 3,
         children: 1,
         size_sqft: 1250,
         floor_level: "Floors 9–11",
-        view_type: "Rideau Canal Panoramic View",
+        view_type: "Manhattan Skyline Panoramic View",
         bed_type: "King",
         bathroom_type:
           "Two full marble bathrooms, master featuring freestanding tub, steam shower and heated stone floors",
@@ -991,7 +991,7 @@ const seed = async () => {
           "King Bed",
           "Full Living Room",
           "Dining Area",
-          "Rideau Canal Panoramic",
+          "Manhattan Skyline Panoramic",
           "2 Full Marble Bathrooms",
           "Steam Shower",
           "Freestanding Soaking Tub",
@@ -1028,19 +1028,19 @@ const seed = async () => {
       },
       {
         category_slug: "grand-suite",
-        name: "Grand Parliament Suite",
-        slug: "grand-parliament-suite",
+        name: "Grand Times Square Suite",
+        slug: "grand-times-square-suite",
         short_description:
-          "A palatial residence directly facing Parliament Hill with private dining and butler.",
+          "A palatial residence directly facing Times Square with private dining and butler.",
         description:
-          "The Grand Parliament Suite commands the most iconic sightline in Ottawa — a direct, uninterrupted view of Parliament Hill's Peace Tower. This palatial residence features a grand living room with a working fireplace, private dining area, two full bedrooms and a dedicated butler on call throughout your stay.",
+          "The Grand Times Square Suite commands the most iconic sightline in New York — a direct, uninterrupted view of the Times Square marquee. This palatial residence features a grand living room with a working fireplace, private dining area, two full bedrooms and a dedicated butler on call throughout your stay.",
         price_per_night: 1650,
         max_occupancy: 4,
         adults: 3,
         children: 1,
         size_sqft: 1400,
         floor_level: "Floors 9–11",
-        view_type: "Parliament Hill Direct View",
+        view_type: "Times Square Direct View",
         bed_type: "King + One Queen",
         bathroom_type:
           "Two luxury marble bathrooms, master with freestanding tub, dual rainfall showers, steam and heated floors",
@@ -1050,7 +1050,7 @@ const seed = async () => {
           "Grand Living Room",
           "Working Fireplace",
           "Private Dining Area",
-          "Parliament Hill View",
+          "Times Square View",
           "2 Marble Bathrooms",
           "Dual Rainfall Showers",
           "Steam Shower",
@@ -1092,9 +1092,9 @@ const seed = async () => {
         name: "Grand Terrace Suite",
         slug: "grand-terrace-suite",
         short_description:
-          "Rare private terrace offering alfresco dining above Ottawa's rooftops.",
+          "Rare private terrace offering alfresco dining above Manhattan's skyline.",
         description:
-          "One of only two suites in the hotel to feature a private outdoor terrace, the Grand Terrace Suite is an extraordinary find. Your personal outdoor space, furnished with teak chairs and a dining table, overlooks Ottawa's skyline. Inside, the suite delivers the full Grand standard — spacious living room, dining area and master bedroom with the finest appointments.",
+          "One of only two suites in the hotel to feature a private outdoor terrace, the Grand Terrace Suite is an extraordinary find. Your personal outdoor space, furnished with teak chairs and a dining table, overlooks Manhattan's skyline. Inside, the suite delivers the full Grand standard — spacious living room, dining area and master bedroom with the finest appointments.",
         price_per_night: 1850,
         max_occupancy: 4,
         adults: 3,
@@ -1152,16 +1152,16 @@ const seed = async () => {
         name: "Grand Penthouse Suite",
         slug: "grand-penthouse-suite",
         short_description:
-          "Penthouse-level grandeur with sweeping views across the entire National Capital.",
+          "Penthouse-level grandeur with sweeping views across all of Manhattan.",
         description:
-          "Positioned on the uppermost residential floor of the château, the Grand Penthouse Suite offers unrivalled elevation and horizon. Panoramic views span from Parliament Hill to the Ottawa River in one direction and the Rideau Canal to the Gatineau Hills in the other. Designed for those who accept nothing short of the absolute best.",
+          "Positioned on the uppermost residential floor, the Grand Penthouse Suite offers unrivalled elevation and horizon. Panoramic views span from Times Square to the Hudson River in one direction and Central Park to the Brooklyn skyline in the other. Designed for those who accept nothing short of the absolute best.",
         price_per_night: 2200,
         max_occupancy: 4,
         adults: 3,
         children: 1,
         size_sqft: 1600,
         floor_level: "Penthouse Floor (Floor 12)",
-        view_type: "360° City, River, Canal & Parliament Views",
+        view_type: "360° City, River, Park & Skyline Views",
         bed_type: "King Master + One King",
         bathroom_type:
           "Two palatial marble bathrooms, master with two freestanding tubs, dual rainfall showers, steam room and heated onyx floors",
@@ -1215,16 +1215,16 @@ const seed = async () => {
         name: "Royal Suite",
         slug: "royal-suite",
         short_description:
-          "Fit for royalty — an opulent two-bedroom residence in the grand château tradition.",
+          "Fit for royalty — an opulent two-bedroom residence of incomparable distinction.",
         description:
-          "Inspired by visits from members of the British Royal Family, the Royal Suite is a statement of aristocratic grandeur. Two king bedrooms, a formal reception room dressed with period antiques, a private study and two full marble bathrooms constitute a genuinely extraordinary residence within the walls of Canada's castle hotel.",
+          "Fit for heads of state and the world's most discerning guests, the Royal Suite is a statement of aristocratic grandeur. Two king bedrooms, a formal reception room dressed with bespoke furnishings, a private study and two full marble bathrooms constitute a genuinely extraordinary residence within the heart of New York City.",
         price_per_night: 3200,
         max_occupancy: 4,
         adults: 4,
         children: 0,
         size_sqft: 2400,
         floor_level: "Floor 11–12",
-        view_type: "Parliament Hill & Rideau Canal Panoramic",
+        view_type: "Times Square & Hudson River Panoramic",
         bed_type: "Two King Bedrooms",
         bathroom_type:
           "Two full marble bathrooms, master with freestanding tub, dual rain showers, steam and heated stone floors",
@@ -1233,8 +1233,8 @@ const seed = async () => {
           "Two King Bedrooms",
           "Formal Reception Room",
           "Private Study",
-          "Period Antique Furnishings",
-          "Parliament & Canal Views",
+          "Bespoke Furnishings",
+          "Times Square & Hudson River Views",
           "2 Full Marble Bathrooms",
           "Freestanding Tub",
           "Dual Rain Showers",
@@ -1276,12 +1276,12 @@ const seed = async () => {
       },
       {
         category_slug: "presidential-suite",
-        name: "Château Signature Suite",
-        slug: "chateau-signature-suite",
+        name: "Moxy Signature Suite",
+        slug: "moxy-signature-suite",
         short_description:
-          "The definitive Fairmont address — a two-floor private residence of incomparable distinction.",
+          "The definitive Moxy address — a two-floor private residence of incomparable distinction.",
         description:
-          "The Château Signature Suite is a two-floor private residence that represents the absolute pinnacle of what Fairmont Château Laurier can offer. A grand staircase connects the reception floor — complete with a formal dining room for twelve, a private screening room and a study — to the upper residential floor with three bedrooms, three full bathrooms and a private wraparound observation terrace. Reserved only for those who require the extraordinary.",
+          "The Moxy Signature Suite is a two-floor private residence that represents the absolute pinnacle of what Moxy NYC Times Square can offer. A grand staircase connects the reception floor — complete with a formal dining room for twelve, a private screening room and a study — to the upper residential floor with three bedrooms, three full bathrooms and a private wraparound observation terrace. Reserved only for those who require the extraordinary.",
         price_per_night: 6500,
         max_occupancy: 8,
         adults: 6,
@@ -1289,7 +1289,7 @@ const seed = async () => {
         size_sqft: 5000,
         floor_level: "Floors 11–12 (Two-floor Residence)",
         view_type:
-          "360° Panoramic — Parliament Hill, Ottawa River, Rideau Canal, Gatineau Hills",
+          "360° Panoramic — Times Square, Hudson River, Central Park, Manhattan",
         bed_type: "Three King Bedrooms + Bunk Cabin",
         bathroom_type:
           "Three full marble bathrooms + powder room, master with two freestanding tubs, dual rainfall showers, steam room, sauna and heated marble floors",
@@ -1397,9 +1397,9 @@ const seed = async () => {
       INSERT INTO offers (title, slug, description, short_description, promo_code, discount_type, discount_value, valid_from, valid_until, image_url, is_active, display_order)
       VALUES
         ('World Cup Luxury Package', 'world-cup-package', 'Celebrate the beautiful game in style. Our World Cup Luxury Package includes three nights in a Deluxe Room, daily breakfast for two, a curated match-viewing experience in our private lounge, and a welcome amenity upon arrival.', 'Three nights, breakfast for two, private match viewing.', 'WORLDCUP2026', 'percentage', 15, '2026-05-01', '2026-12-31', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=900&q=85&fit=crop', true, 1),
-        ('Bed & Breakfast Retreat', 'bed-and-breakfast', 'Begin each morning with a full gourmet breakfast at Wilfreds Restaurant, served amid the grandeur of the château''s dining room. Available with any room category.', 'Room + daily gourmet breakfast for two.', 'BBFAIRMONT', 'fixed', 65, '2026-01-01', '2026-12-31', 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=900&q=85&fit=crop', true, 2),
-        ('Romance in the Château', 'romance-package', 'Arrive to a room dressed with rose petals, Veuve Clicquot Champagne, and hand-selected confections. Includes a couples spa treatment and a candlelit dinner reservation at Wilfreds.', 'Champagne, roses, couples spa, and dinner.', 'ROMANCE', 'fixed', 0, '2026-01-01', '2026-12-31', 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=85&fit=crop', true, 3),
-        ('The Long Weekend Escape', 'long-weekend', 'Stay three or more nights and receive a 20% reduction across all room categories. Ideal for extended discovery of Ottawa and the surrounding National Capital Region.', '20% off for stays of 3 nights or more.', 'LONGWEEKEND', 'percentage', 20, '2026-01-01', '2026-12-31', 'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=900&q=85&fit=crop', true, 4)
+        ('Bed & Breakfast Retreat', 'bed-and-breakfast', 'Begin each morning with a full gourmet breakfast at The Loft Restaurant, served amid the vibrant energy of Moxy NYC''s dining room. Available with any room category.', 'Room + daily gourmet breakfast for two.', 'BBMOXY', 'fixed', 65, '2026-01-01', '2026-12-31', 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?w=900&q=85&fit=crop', true, 2),
+        ('Romance in the City', 'romance-package', 'Arrive to a room dressed with rose petals, Veuve Clicquot Champagne, and hand-selected confections. Includes a couples spa treatment and a candlelit dinner reservation at The Loft Restaurant.', 'Champagne, roses, couples spa, and dinner.', 'ROMANCE', 'fixed', 0, '2026-01-01', '2026-12-31', 'https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?w=900&q=85&fit=crop', true, 3),
+        ('The Long Weekend Escape', 'long-weekend', 'Stay three or more nights and receive a 20% reduction across all room categories. Ideal for extended discovery of New York City and its world-class neighbourhoods.', '20% off for stays of 3 nights or more.', 'LONGWEEKEND', 'percentage', 20, '2026-01-01', '2026-12-31', 'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=900&q=85&fit=crop', true, 4)
       ON CONFLICT (slug) DO UPDATE SET image_url = EXCLUDED.image_url;
     `);
 
@@ -1417,9 +1417,9 @@ const seed = async () => {
             `
           INSERT INTO blog_posts (title, slug, excerpt, body, author_id, category, tags, cover_image, is_published, published_at)
           VALUES
-            ('Ottawa in Spring: What to See and Do Near the Château', 'ottawa-spring-guide-2026', 'Spring in Ottawa is a celebration of colour, culture, and renewal. From the world-famous Canadian Tulip Festival to the awakening Rideau Canal, the city offers an unrivalled backdrop for a luxury getaway.', '<p>Spring in Ottawa...</p>', $1, 'Travel Guides', '["Ottawa","Spring","Travel","Tulip Festival"]', 'https://images.unsplash.com/photo-1521747116042-5a810fda9664?w=1200&q=85&fit=crop', true, NOW()),
-            ('A History of Fairmont Château Laurier: 114 Years of Excellence', 'chateau-laurier-history', 'Since opening its doors on June 12, 1912, Fairmont Château Laurier has stood as a beacon of hospitality in Canada''s capital. From royal visits to historic summits, its walls carry the weight of a nation''s memory.', '<p>The château''s story begins...</p>', $1, 'Hotel News', '["History","Château","Heritage","Ottawa"]', 'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=1200&q=85&fit=crop', true, NOW()),
-            ('The 2026 FIFA World Cup: Canada''s Once-in-a-Generation Moment', 'fifa-world-cup-2026-canada', 'With Canada co-hosting the 2026 FIFA World Cup alongside the United States and Mexico, Ottawa has become one of the most sought-after destinations for football fans from around the world. Here is how Fairmont Château Laurier is celebrating.', '<p>The World Cup arrives...</p>', $1, 'Hotel News', '["World Cup","Football","FIFA 2026","Events"]', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=85&fit=crop', true, NOW())
+            ('New York City in Spring: What to See and Do Near Moxy NYC', 'nyc-spring-guide-2026', 'Spring in New York City is a celebration of energy, culture, and renewal. From the blooming paths of Central Park to the electric pulse of Times Square, the city offers an unrivalled backdrop for a luxury getaway.', '<p>Spring in New York City...</p>', $1, 'Travel Guides', '["New York","Spring","Travel","Times Square"]', 'https://images.unsplash.com/photo-1521747116042-5a810fda9664?w=1200&q=85&fit=crop', true, NOW()),
+            ('Moxy NYC Times Square: Redefining Urban Luxury Since 1996', 'moxy-nyc-history', 'Since opening its doors in 1996, Moxy NYC Times Square has stood as a beacon of bold hospitality in the heart of New York City. From celebrity stays to iconic events, our story is woven into the fabric of Times Square itself.', '<p>The Moxy NYC story begins...</p>', $1, 'Hotel News', '["History","Moxy NYC","Heritage","Times Square"]', 'https://images.unsplash.com/photo-1568084680786-a84f91d1153c?w=1200&q=85&fit=crop', true, NOW()),
+            ('The 2026 FIFA World Cup: New York City''s Moment to Shine', 'fifa-world-cup-2026-nyc', 'With New York City hosting matches in the 2026 FIFA World Cup, Times Square has become one of the most sought-after destinations for football fans from around the world. Here is how Moxy NYC Times Square is celebrating.', '<p>The World Cup arrives...</p>', $1, 'Hotel News', '["World Cup","Football","FIFA 2026","Events"]', 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=1200&q=85&fit=crop', true, NOW())
           ON CONFLICT (slug) DO UPDATE SET cover_image = EXCLUDED.cover_image;
         `,
             [authorId],
@@ -1431,10 +1431,10 @@ const seed = async () => {
     await client.query(`
       INSERT INTO reviews (guest_name, rating, title, body, is_approved)
       VALUES
-        ('James & Catherine H.', 5, 'The finest hotel experience of our lives', 'From the moment we arrived, every detail was attended to with a grace and professionalism that is vanishingly rare. The Grand Fairmont Suite exceeded every expectation. Ottawa is the better for having this extraordinary property.', true),
-        ('Ambassador R. Dupont', 5, 'Unrivalled in elegance and service', 'I have stayed in the world''s greatest hotels over four decades of diplomatic service. Fairmont Château Laurier remains, without qualification, among the very finest. The attentiveness of staff and the beauty of the property are simply extraordinary.', true),
+        ('James & Catherine H.', 5, 'The finest hotel experience of our lives', 'From the moment we arrived, every detail was attended to with a grace and professionalism that is vanishingly rare. The Grand Moxy Suite exceeded every expectation. New York City is the better for having this extraordinary property.', true),
+        ('Ambassador R. Dupont', 5, 'Unrivalled in elegance and service', 'I have stayed in the world''s greatest hotels over four decades of diplomatic service. Moxy NYC Times Square remains, without qualification, among the very finest. The attentiveness of staff and the energy of the property are simply extraordinary.', true),
         ('Dr. Priya Mehta', 5, 'A perfect setting for our anniversary', 'We chose the Romance Package for our tenth anniversary and were moved by the care taken with every element — the flowers, the champagne, the dinner. The staff made us feel like the only guests in the hotel.', true),
-        ('Marcus T.', 5, 'The Parliament View room was breathtaking', 'Waking up to a direct view of Parliament Hill from bed is something I will not forget. The room was immaculate, the breakfast at Wilfreds was superb, and the concierge found us theatre tickets at the last minute. Impeccable.', true),
+        ('Marcus T.', 5, 'The Times Square View room was breathtaking', 'Waking up to a direct view of Times Square from bed is something I will not forget. The room was immaculate, the breakfast at The Loft Restaurant was superb, and the concierge found us theatre tickets at the last minute. Impeccable.', true),
         ('The Chen Family', 5, 'We will return every year', 'Travelling with children can be challenging, but the team here managed to make every member of our family feel at home. The pool, the dining, the rooms — everything is at the absolute peak of quality.', true)
       ON CONFLICT DO NOTHING;
     `);

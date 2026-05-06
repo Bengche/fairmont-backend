@@ -6,7 +6,7 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const FROM = {
   email: process.env.FROM_EMAIL || "support@fifahotel.com",
-  name: "Fairmont Château Laurier",
+  name: "Moxy NYC Times Square",
 };
 
 // ─── Table-based email layout — works in all clients including Gmail/Outlook ─
@@ -53,9 +53,9 @@ const emailLayout = (title, bodyContent) => `
           <!-- Header -->
           <tr>
             <td class="email-header" style="background-color:#1C1C1C;padding:36px 44px;text-align:center;border-radius:2px 2px 0 0;">
-              <p style="margin:0;font-family:Georgia,serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#C9A84C;font-weight:400;">Fairmont</p>
-              <h1 style="margin:8px 0 0;font-family:Georgia,serif;font-size:24px;font-weight:400;letter-spacing:0.1em;color:#FFFFFF;line-height:1.2;">Ch&acirc;teau Laurier</h1>
-              <p style="margin:10px 0 0;font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.4);font-family:Arial,sans-serif;text-transform:uppercase;">Ottawa &nbsp;&bull;&nbsp; Canada</p>
+              <p style="margin:0;font-family:Georgia,serif;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#C9A84C;font-weight:400;">Moxy NYC</p>
+              <h1 style="margin:8px 0 0;font-family:Georgia,serif;font-size:24px;font-weight:400;letter-spacing:0.1em;color:#FFFFFF;line-height:1.2;">Times Square</h1>
+              <p style="margin:10px 0 0;font-size:11px;letter-spacing:0.12em;color:rgba(255,255,255,0.4);font-family:Arial,sans-serif;text-transform:uppercase;">New York &nbsp;&bull;&nbsp; United States</p>
             </td>
           </tr>
 
@@ -75,11 +75,11 @@ const emailLayout = (title, bodyContent) => `
           <!-- Footer -->
           <tr>
             <td class="email-footer" style="background-color:#1C1C1C;padding:28px 44px;text-align:center;border-radius:0 0 2px 2px;">
-              <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:0.04em;">1 Rideau Street, Ottawa, Ontario K1N 8S7, Canada</p>
+              <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.5);letter-spacing:0.04em;">485 7th Ave, New York, NY 10018, United States</p>
               <p style="margin:0 0 6px;font-family:Arial,sans-serif;font-size:12px;color:rgba(255,255,255,0.5);">
                 <a href="mailto:support@fifahotel.com" style="color:#C9A84C;text-decoration:none;">support@fifahotel.com</a>
               </p>
-              <p style="margin:16px 0 0;font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.3);">&copy; ${new Date().getFullYear()} Fairmont Ch&acirc;teau Laurier. All rights reserved.</p>
+              <p style="margin:16px 0 0;font-family:Arial,sans-serif;font-size:11px;color:rgba(255,255,255,0.3);">&copy; ${new Date().getFullYear()} Moxy NYC Times Square. All rights reserved.</p>
             </td>
           </tr>
 
@@ -141,7 +141,7 @@ export const sendBookingReceived = async (booking, bankDetails) => {
   const body = `
     ${h2("Your Reservation Request Has Been Received")}
     ${para(`Dear ${booking.guest_first_name},`)}
-    ${para("Thank you for choosing Fairmont Ch&acirc;teau Laurier. Your booking request has been received and is awaiting payment confirmation.")}
+    ${para("Thank you for choosing Moxy NYC Times Square. Your booking request has been received and is awaiting payment confirmation.")}
     ${refBadge(booking.reference_number)}
     ${detailCard(
       detailRow("Room", booking.room_name) +
@@ -154,7 +154,7 @@ export const sendBookingReceived = async (booking, bankDetails) => {
         ) +
         detailRow(
           "Total Amount",
-          `CAD $${Number(booking.total_amount).toFixed(2)}`,
+          `USD $${Number(booking.total_amount).toFixed(2)}`,
         ),
     )}
     ${divider()}
@@ -179,7 +179,7 @@ export const sendBookingReceived = async (booking, bankDetails) => {
   await sgMail.send({
     to: booking.guest_email,
     from: FROM,
-    subject: `Reservation Request — ${booking.reference_number} | Fairmont Château Laurier`,
+    subject: `Reservation Request — ${booking.reference_number} | Moxy NYC Times Square`,
     html: emailLayout("Reservation Request Received", body),
   });
 };
@@ -207,7 +207,7 @@ export const sendReceiptConfirmationToGuest = async (booking) => {
   await sgMail.send({
     to: booking.guest_email,
     from: FROM,
-    subject: `Payment Proof Received — ${booking.reference_number} | Fairmont Château Laurier`,
+    subject: `Payment Proof Received — ${booking.reference_number} | Moxy NYC Times Square`,
     html: emailLayout("Payment Proof Received", body),
   });
 };
@@ -229,7 +229,7 @@ export const sendReceiptNotificationToSupport = async (booking, receiptUrl) => {
         detailRow("Room", booking.room_name) +
         detailRow("Check-in", new Date(booking.check_in).toDateString()) +
         detailRow("Check-out", new Date(booking.check_out).toDateString()) +
-        detailRow("Total", `CAD $${Number(booking.total_amount).toFixed(2)}`),
+        detailRow("Total", `USD $${Number(booking.total_amount).toFixed(2)}`),
     )}
     ${receiptUrl ? para(`<a href="${receiptUrl}" style="color:#C9A84C;">View uploaded payment receipt &rarr;</a>`) : ""}
     ${ctaButton(`${frontendUrl}/admin/bookings`, "Review in Admin Dashboard")}
@@ -248,7 +248,7 @@ export const sendBookingConfirmed = async (booking) => {
   const body = `
     ${h2("Your Reservation Is Confirmed")}
     ${para(`Dear ${booking.guest_first_name},`)}
-    ${para("We are delighted to confirm your reservation at Fairmont Ch&acirc;teau Laurier. We look forward to welcoming you to Ottawa's most distinguished address.")}
+    ${para("We are delighted to confirm your reservation at Moxy NYC Times Square. We look forward to welcoming you to New York City's most vibrant address.")}
     ${refBadge(booking.reference_number)}
     ${detailCard(
       detailRow("Room", booking.room_name) +
@@ -261,7 +261,7 @@ export const sendBookingConfirmed = async (booking) => {
         ) +
         detailRow(
           "Total Paid",
-          `CAD $${Number(booking.total_amount).toFixed(2)}`,
+          `USD $${Number(booking.total_amount).toFixed(2)}`,
         ),
     )}
     ${divider()}
@@ -276,7 +276,7 @@ export const sendBookingConfirmed = async (booking) => {
   await sgMail.send({
     to: booking.guest_email,
     from: FROM,
-    subject: `Reservation Confirmed — ${booking.reference_number} | Fairmont Château Laurier`,
+    subject: `Reservation Confirmed — ${booking.reference_number} | Moxy NYC Times Square`,
     html: emailLayout("Reservation Confirmed", body),
   });
 };
@@ -296,13 +296,13 @@ export const sendBookingCancelled = async (booking) => {
         ),
     )}
     ${para("If a refund is applicable under our cancellation policy, it will be processed within 7–10 business days. Please review our <a href='https://fifahotel.com/cancellation-policy' style='color:#C9A84C;text-decoration:none;'>Cancellation Policy</a> for details.")}
-    ${para("We hope to welcome you to Fairmont Ch&acirc;teau Laurier on a future occasion.")}
+    ${para("We hope to welcome you to Moxy NYC Times Square on a future occasion.")}
   `;
 
   await sgMail.send({
     to: booking.guest_email,
     from: FROM,
-    subject: `Reservation Cancelled — ${booking.reference_number} | Fairmont Château Laurier`,
+    subject: `Reservation Cancelled — ${booking.reference_number} | Moxy NYC Times Square`,
     html: emailLayout("Reservation Cancelled", body),
   });
 };
@@ -310,30 +310,30 @@ export const sendBookingCancelled = async (booking) => {
 // ─── 6. Welcome / Registration ───────────────────────────────────────────────
 export const sendWelcomeEmail = async (user) => {
   const body = `
-    ${h2("Welcome to Fairmont Ch&acirc;teau Laurier")}
+    ${h2("Welcome to Moxy NYC Times Square")}
     ${para(`Dear ${user.first_name},`)}
     ${para("Thank you for creating an account with us. You now have access to our full suite of online reservation services, your personal booking history, and our loyalty programme.")}
     ${divider()}
-    ${h2("Fairmont Loyalty Programme", "24px")}
+    ${h2("Moxy Rewards Programme", "24px")}
     ${para("As a member, you earn points on every eligible stay. Points may be redeemed for complimentary nights, dining credits, and exclusive experiences.")}
     ${detailCard(
-      detailRow("Silver", "Entry level — earn 1 point per CAD $1 spent") +
+      detailRow("Select", "Entry level — earn 1 point per USD $1 spent") +
         detailRow(
-          "Gold",
+          "Silver",
           "10 stays or 30 nights per year — earn 1.5 pts / $1",
         ) +
         detailRow(
-          "Platinum",
+          "Gold",
           "25 stays or 75 nights per year — earn 2 pts / $1",
         ),
     )}
-    ${para("We look forward to welcoming you to Ottawa's most celebrated address.")}
+    ${para("We look forward to welcoming you to New York's most vibrant address.")}
   `;
 
   await sgMail.send({
     to: user.email,
     from: FROM,
-    subject: `Welcome to Fairmont Château Laurier`,
+    subject: `Welcome to Moxy NYC Times Square`,
     html: emailLayout("Welcome", body),
   });
 };
@@ -351,7 +351,7 @@ export const sendPasswordReset = async (user, resetLink) => {
   await sgMail.send({
     to: user.email,
     from: FROM,
-    subject: `Password Reset — Fairmont Château Laurier`,
+    subject: `Password Reset — Moxy NYC Times Square`,
     html: emailLayout("Password Reset", body),
   });
 };
@@ -360,21 +360,21 @@ export const sendPasswordReset = async (user, resetLink) => {
 export const sendNewsletterWelcome = async (email) => {
   const body = `
     ${h2("Thank You for Subscribing")}
-    ${para("You are now subscribed to news and exclusive offers from Fairmont Ch&acirc;teau Laurier.")}
+    ${para("You are now subscribed to news and exclusive offers from Moxy NYC Times Square.")}
     ${para("As a subscriber, you will be among the first to receive:")}
     ${detailCard(
       detailRow("&#9670;", "Seasonal offers and exclusive packages") +
         detailRow("&#9670;", "Invitations to private events and galas") +
-        detailRow("&#9670;", "Travel inspiration and Ottawa guides") +
+        detailRow("&#9670;", "Travel inspiration and New York City guides") +
         detailRow("&#9670;", "Early access to new dining and spa experiences"),
     )}
-    ${para("We look forward to sharing the finest that Ottawa has to offer.")}
+    ${para("We look forward to sharing the finest that New York City has to offer.")}
   `;
 
   await sgMail.send({
     to: email,
     from: FROM,
-    subject: `Welcome to the Fairmont Château Laurier Newsletter`,
+    subject: `Welcome to the Moxy NYC Times Square Newsletter`,
     html: emailLayout("Newsletter Welcome", body),
   });
 };

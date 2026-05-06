@@ -15,7 +15,7 @@ const start = async () => {
     console.log("PostgreSQL connected successfully.");
 
     app.listen(PORT, () => {
-      console.log(`Fairmont Château Laurier API running on port ${PORT}`);
+      console.log(`Moxy NYC Times Square API running on port ${PORT}`);
     });
   } catch (err) {
     console.error("Failed to start server:", err.message);

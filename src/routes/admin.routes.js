@@ -554,7 +554,13 @@ router.post(
       if (!errors.isEmpty())
         return res.status(400).json({ errors: errors.array() });
 
-      const { name, min_nights, start_date, end_date, is_active = true } = req.body;
+      const {
+        name,
+        min_nights,
+        start_date,
+        end_date,
+        is_active = true,
+      } = req.body;
       const { rows } = await pool.query(
         `INSERT INTO seasonal_min_nights (name, min_nights, start_date, end_date, is_active)
          VALUES ($1, $2, $3, $4, $5) RETURNING *`,
@@ -588,7 +594,14 @@ router.put(
         `UPDATE seasonal_min_nights
          SET name=$1, min_nights=$2, start_date=$3, end_date=$4, is_active=$5, updated_at=NOW()
          WHERE id=$6`,
-        [name, min_nights, start_date, end_date, is_active !== false, req.params.id],
+        [
+          name,
+          min_nights,
+          start_date,
+          end_date,
+          is_active !== false,
+          req.params.id,
+        ],
       );
       res.json({ message: "Rule updated." });
     } catch (err) {
