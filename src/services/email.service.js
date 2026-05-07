@@ -137,11 +137,11 @@ const refBadge = (ref) => `
 </table>`;
 
 // ─── 1. Booking Received (to guest) ─────────────────────────────────────────
-export const sendBookingReceived = async (booking, bankDetails) => {
+export const sendBookingReceived = async (booking) => {
   const body = `
     ${h2("Your Reservation Request Has Been Received")}
     ${para(`Dear ${booking.guest_first_name},`)}
-    ${para("Thank you for choosing Moxy NYC Times Square. Your booking request has been received and is awaiting payment confirmation.")}
+    ${para("Thank you for choosing Moxy NYC Times Square. Your reservation request has been received successfully and is now awaiting review by our reservations team.")}
     ${refBadge(booking.reference_number)}
     ${detailCard(
       detailRow("Room", booking.room_name) +
@@ -158,22 +158,10 @@ export const sendBookingReceived = async (booking, bankDetails) => {
         ),
     )}
     ${divider()}
-    ${h2("Payment Instructions", "28px")}
-    ${para("To confirm your reservation, please transfer the full amount to the bank account below. Include your reference number as the payment description.")}
-    ${detailCard(
-      detailRow("Bank", bankDetails.bank_name) +
-        detailRow("Account Name", bankDetails.bank_account_name) +
-        detailRow("Account Number", bankDetails.bank_account_number) +
-        detailRow("Routing Number", bankDetails.bank_routing_number) +
-        detailRow("SWIFT Code", bankDetails.bank_swift) +
-        detailRow(
-          "Payment Reference",
-          `<span style="color:#C9A84C;font-weight:700;">${booking.reference_number}</span>`,
-        ),
-    )}
-    ${para(`<strong>Note:</strong> ${bankDetails.bank_instructions}`)}
-    ${para('Once payment is complete, click <strong>"I Have Paid"</strong> on the booking site to upload your proof of payment. Your reservation will be confirmed within 24 hours.')}
-    ${para("Should you need assistance, contact us at <a href='mailto:support@fifahotel.com' style='color:#C9A84C;text-decoration:none;'>support@fifahotel.com</a>.", "margin-top:20px;")}
+    ${h2("What Happens Next", "28px")}
+    ${para("Our team will review your requested stay and confirm the next steps by email as soon as possible.")}
+    ${para("If payment or any additional information is required to finalize the reservation, those instructions will be sent directly by our reservations team.")}
+    ${para("Should you need assistance in the meantime, please contact us at <a href='mailto:support@fifahotel.com' style='color:#C9A84C;text-decoration:none;'>support@fifahotel.com</a> and include your booking reference number.", "margin-top:20px;")}
   `;
 
   await sgMail.send({
@@ -286,7 +274,7 @@ export const sendBookingCancelled = async (booking) => {
   const body = `
     ${h2("Reservation Cancellation Confirmed")}
     ${para(`Dear ${booking.guest_first_name},`)}
-    ${para(`Your reservation with reference <strong>${booking.reference_number}</strong> has been cancelled as requested.`)}
+    ${para(`Thank you for your interest in staying with us. We regret to inform you that reservation request <strong>${booking.reference_number}</strong> has not been approved and has now been cancelled.`)}
     ${detailCard(
       detailRow("Reference", booking.reference_number) +
         detailRow("Room", booking.room_name) +
@@ -295,8 +283,8 @@ export const sendBookingCancelled = async (booking) => {
           new Date(booking.check_in).toDateString(),
         ),
     )}
-    ${para("If a refund is applicable under our cancellation policy, it will be processed within 7–10 business days. Please review our <a href='https://fifahotel.com/cancellation-policy' style='color:#C9A84C;text-decoration:none;'>Cancellation Policy</a> for details.")}
-    ${para("We hope to welcome you to Moxy NYC Times Square on a future occasion.")}
+    ${para("If you believe this was sent in error or would like assistance with alternative dates, please contact our reservations team at <a href='mailto:support@fifahotel.com' style='color:#C9A84C;text-decoration:none;'>support@fifahotel.com</a>.")}
+    ${para("We hope to have the opportunity to welcome you to Moxy NYC Times Square on a future occasion.")}
   `;
 
   await sgMail.send({

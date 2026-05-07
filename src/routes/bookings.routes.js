@@ -204,17 +204,8 @@ router.post(
 
       const booking = { ...bookingRows[0], room_name: room.name };
 
-      // Fetch bank details from DB
-      const { rows: configRows } = await pool.query(
-        "SELECT key, value FROM site_config",
-      );
-      const bankDetails = {};
-      configRows.forEach((r) => {
-        bankDetails[r.key] = r.value;
-      });
-
       try {
-        await sendBookingReceived(booking, bankDetails);
+        await sendBookingReceived(booking);
       } catch (_) {}
 
       res.status(201).json({ booking: bookingRows[0] });

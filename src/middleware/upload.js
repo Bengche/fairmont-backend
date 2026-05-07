@@ -21,7 +21,14 @@ function ensureDir(subdir) {
   return uploadsDir;
 }
 
-function createUploader({ subdir, prefix, allowedExts, allowedMimes, maxFileSize, errorMessage }) {
+function createUploader({
+  subdir,
+  prefix,
+  allowedExts,
+  allowedMimes,
+  maxFileSize,
+  errorMessage,
+}) {
   const uploadsDir = ensureDir(subdir);
 
   const storage = multer.diskStorage({
@@ -76,7 +83,10 @@ export const uploadRoomImage = multer({
     if (allowedExts.includes(ext) && allowedMimes.includes(file.mimetype)) {
       cb(null, true);
     } else {
-      cb(new Error("Only JPG, PNG, WEBP, AVIF, and JFIF files are accepted."), false);
+      cb(
+        new Error("Only JPG, PNG, WEBP, AVIF, and JFIF files are accepted."),
+        false,
+      );
     }
   },
   limits: { fileSize: 15 * 1024 * 1024 },

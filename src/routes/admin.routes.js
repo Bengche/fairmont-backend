@@ -2,7 +2,10 @@ import express from "express";
 import { body, validationResult } from "express-validator";
 import pool from "../config/db.js";
 import { adminAuth } from "../middleware/adminAuth.js";
-import { uploadRoomImage, uploadBufferToCloudinary } from "../middleware/upload.js";
+import {
+  uploadRoomImage,
+  uploadBufferToCloudinary,
+} from "../middleware/upload.js";
 import {
   sendBookingConfirmed,
   sendBookingCancelled,
@@ -28,7 +31,7 @@ router.get("/stats", async (req, res, next) => {
           `SELECT COUNT(*) as total FROM rooms WHERE is_available = true`,
         ),
         pool.query(
-          `SELECT COUNT(*) as total FROM bookings WHERE status = 'pending_verification'`,
+          `SELECT COUNT(*) as total FROM bookings WHERE status IN ('pending_payment', 'pending_verification')`,
         ),
         pool.query(
           `SELECT b.reference_number as reference,
@@ -176,7 +179,10 @@ router.post(
       if (!req.file) {
         return res.status(400).json({ error: "Image file is required." });
       }
-      const url = await uploadBufferToCloudinary(req.file.buffer, "fairmont/rooms");
+      const url = await uploadBufferToCloudinary(
+        req.file.buffer,
+        "fairmont/rooms",
+      );
       res.json({ url });
     } catch (err) {
       next(err);
