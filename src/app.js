@@ -25,6 +25,20 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+// Required when running behind a reverse proxy so rate limiting identifies real client IPs.
+// Set TRUST_PROXY=true (or a number like 1) in production environments behind a load balancer.
+const trustProxyEnv = process.env.TRUST_PROXY;
+if (trustProxyEnv) {
+  if (trustProxyEnv === "true") app.set("trust proxy", 1);
+  else if (trustProxyEnv === "false") app.set("trust proxy", false);
+  else {
+    const hops = Number(trustProxyEnv);
+    app.set("trust proxy", Number.isNaN(hops) ? 1 : hops);
+  }
+} else if (process.env.NODE_ENV === "production") {
+  app.set("trust proxy", 1);
+}
+
 // Security
 app.use(
   helmet({
