@@ -2,6 +2,7 @@ import express from "express";
 import { body, validationResult } from "express-validator";
 import pool from "../config/db.js";
 import { adminAuth } from "../middleware/adminAuth.js";
+import { uploadRoomImage, uploadBufferToCloudinary } from "../middleware/upload.js";
 import {
   sendBookingConfirmed,
   sendBookingCancelled,
@@ -165,6 +166,24 @@ router.patch(
 );
 
 // ─── Rooms CRUD ───────────────────────────────────────────────────────────────
+
+// POST /api/admin/rooms/upload-image
+router.post(
+  "/rooms/upload-image",
+  uploadRoomImage.single("image"),
+  async (req, res, next) => {
+    try {
+      if (!req.file) {
+        return res.status(400).json({ error: "Image file is required." });
+      }
+      const url = await uploadBufferToCloudinary(req.file.buffer, "fairmont/rooms");
+      res.json({ url });
+    } catch (err) {
+      next(err);
+    }
+  },
+);
+
 router.get("/rooms", async (req, res, next) => {
   try {
     const { rows } = await pool.query(`
