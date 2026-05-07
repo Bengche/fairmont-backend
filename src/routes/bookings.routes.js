@@ -14,7 +14,7 @@ import {
 
 const router = express.Router();
 
-const TAX_RATE = 0.15; // 15% HST Canada
+const TAX_RATE = 0.05; // 5% tax
 
 function roundMoney(value) {
   return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
