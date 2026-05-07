@@ -126,6 +126,28 @@ router.patch(
         return res.status(404).json({ error: "Booking not found." });
       const booking = existing[0];
 
+      if (status === "confirmed") {
+        const { rows: overlaps } = await pool.query(
+          `
+          SELECT id FROM bookings
+          WHERE room_id = $1
+            AND id <> $2
+            AND status IN ('confirmed', 'checked_in', 'checked_out')
+            AND check_in < $4
+            AND check_out > $3
+          LIMIT 1
+          `,
+          [booking.room_id, booking.id, booking.check_in, booking.check_out],
+        );
+
+        if (overlaps.length) {
+          return res.status(409).json({
+            error:
+              "Cannot confirm this booking because the room is already confirmed for overlapping dates.",
+          });
+        }
+      }
+
       const updates = { status, updated_at: new Date() };
       if (status === "confirmed") updates.payment_verified_at = new Date();
       if (status === "cancelled") {

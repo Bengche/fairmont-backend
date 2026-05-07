@@ -88,11 +88,12 @@ router.post(
           .json({ error: "Room not found or unavailable." });
       const room = roomRows[0];
 
-      // Check no conflicting booking
+      // In request-first flow, only already confirmed/checked stays should block.
+      // Pending requests can coexist until admin confirmation.
       const { rows: conflict } = await pool.query(
         `
       SELECT id FROM bookings
-      WHERE room_id = $1 AND status NOT IN ('cancelled')
+      WHERE room_id = $1 AND status IN ('confirmed', 'checked_in', 'checked_out')
         AND check_in < $3 AND check_out > $2
     `,
         [room_id, check_in, check_out],
