@@ -16,6 +16,10 @@ const router = express.Router();
 
 const TAX_RATE = 0.15; // 15% HST Canada
 
+function roundMoney(value) {
+  return Math.round((Number(value) + Number.EPSILON) * 100) / 100;
+}
+
 // POST /api/bookings — create booking
 router.post(
   "/",
@@ -152,9 +156,12 @@ router.post(
         }
       }
 
-      const subtotal = roomTotal + addonsTotal - discountAmount;
-      const taxAmount = subtotal * TAX_RATE;
-      const totalAmount = subtotal + taxAmount;
+      // Guardrail: promo can never reduce below zero payable base.
+      discountAmount = Math.min(discountAmount, roomTotal + addonsTotal);
+
+      const subtotal = roundMoney(roomTotal + addonsTotal - discountAmount);
+      const taxAmount = roundMoney(subtotal * TAX_RATE);
+      const totalAmount = roundMoney(subtotal + taxAmount);
 
       const reference_number = generateReference();
 
@@ -184,14 +191,14 @@ router.post(
           adults,
           children,
           JSON.stringify(selectedAddons),
-          addonsTotal,
+          roundMoney(addonsTotal),
           subtotal,
           taxAmount,
           totalAmount,
           special_requests || null,
           arrival_time || null,
           promo_code || null,
-          discountAmount,
+          roundMoney(discountAmount),
         ],
       );
 
