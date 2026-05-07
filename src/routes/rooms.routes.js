@@ -65,22 +65,16 @@ router.post("/check-availability", async (req, res, next) => {
     if (!dateCheck.valid)
       return res.status(400).json({ error: dateCheck.message });
 
-    // Find rooms not booked in that period
+    // Return all active rooms for availability search display.
     const { rows } = await pool.query(
       `
       SELECT r.*, rc.name as category_name, rc.slug as category_slug
       FROM rooms r
       LEFT JOIN room_categories rc ON r.category_id = rc.id
       WHERE r.is_available = true
-        AND r.id NOT IN (
-          SELECT room_id FROM bookings
-          WHERE status NOT IN ('cancelled')
-            AND check_in < $2
-            AND check_out > $1
-        )
       ORDER BY r.price_per_night ASC
     `,
-      [check_in, check_out],
+      [],
     );
 
     res.json({ rooms: rows, nights: dateCheck.nights, check_in, check_out });
