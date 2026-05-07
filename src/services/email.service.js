@@ -172,6 +172,44 @@ export const sendBookingReceived = async (booking) => {
   });
 };
 
+// ─── 1b. Booking Request Notification (to support team) ────────────────────
+export const sendBookingRequestNotificationToSupport = async (booking) => {
+  const frontendUrl = process.env.FRONTEND_URL || "http://localhost:3000";
+  const supportEmail = process.env.SUPPORT_EMAIL || "support@fifahotel.com";
+
+  const body = `
+    ${h2("New Reservation Request — Action Required")}
+    ${para("A guest has submitted a new reservation request. Please review and reply with the next steps.")}
+    ${detailCard(
+      detailRow("Reference", booking.reference_number) +
+        detailRow(
+          "Guest",
+          `${booking.guest_first_name} ${booking.guest_last_name}`,
+        ) +
+        detailRow("Email", booking.guest_email) +
+        detailRow("Phone", booking.guest_phone) +
+        detailRow("Room", booking.room_name) +
+        detailRow("Check-in", new Date(booking.check_in).toDateString()) +
+        detailRow("Check-out", new Date(booking.check_out).toDateString()) +
+        detailRow("Nights", booking.nights) +
+        detailRow(
+          "Guests",
+          `${booking.adults} adult(s)${booking.children ? ", " + booking.children + " child(ren)" : ""}`,
+        ) +
+        detailRow("Estimated Total", `USD $${Number(booking.total_amount).toFixed(2)}`),
+    )}
+    ${booking.special_requests ? para(`<strong>Special Requests:</strong> ${booking.special_requests}`) : ""}
+    ${ctaButton(`${frontendUrl}/admin/bookings?status=pending_payment`, "Review Request in Admin")}
+  `;
+
+  await sgMail.send({
+    to: supportEmail,
+    from: FROM,
+    subject: `[ACTION REQUIRED] Reservation Request — ${booking.reference_number}`,
+    html: emailLayout("Reservation Request — Action Required", body),
+  });
+};
+
 // ─── 2. Payment Receipt Uploaded — to guest ─────────────────────────────────
 export const sendReceiptConfirmationToGuest = async (booking) => {
   const body = `

@@ -7,6 +7,7 @@ import { generateReference } from "../utils/generateReference.js";
 import { validateBookingDates } from "../utils/validateDates.js";
 import {
   sendBookingReceived,
+  sendBookingRequestNotificationToSupport,
   sendReceiptConfirmationToGuest,
   sendReceiptNotificationToSupport,
   sendBookingCancelled,
@@ -206,6 +207,9 @@ router.post(
 
       try {
         await sendBookingReceived(booking);
+      } catch (_) {}
+      try {
+        await sendBookingRequestNotificationToSupport(booking);
       } catch (_) {}
 
       res.status(201).json({ booking: bookingRows[0] });
