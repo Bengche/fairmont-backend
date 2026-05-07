@@ -61,6 +61,7 @@ router.get("/categories", async (req, res, next) => {
 router.post("/check-availability", async (req, res, next) => {
   try {
     const { check_in, check_out, adults = 1, children = 0 } = req.body;
+    const totalGuests = Number(adults) + Number(children || 0);
     const dateCheck = validateBookingDates(check_in, check_out);
     if (!dateCheck.valid)
       return res.status(400).json({ error: dateCheck.message });
@@ -72,7 +73,7 @@ router.post("/check-availability", async (req, res, next) => {
       FROM rooms r
       LEFT JOIN room_categories rc ON r.category_id = rc.id
       WHERE r.is_available = true
-        AND r.adults >= $1
+        AND r.max_occupancy >= $1
         AND r.id NOT IN (
           SELECT room_id FROM bookings
           WHERE status NOT IN ('cancelled')
@@ -81,7 +82,7 @@ router.post("/check-availability", async (req, res, next) => {
         )
       ORDER BY r.price_per_night ASC
     `,
-      [Number(adults), check_in, check_out],
+      [totalGuests, check_in, check_out],
     );
 
     res.json({ rooms: rows, nights: dateCheck.nights, check_in, check_out });
