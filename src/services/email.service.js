@@ -196,7 +196,10 @@ export const sendBookingRequestNotificationToSupport = async (booking) => {
           "Guests",
           `${booking.adults} adult(s)${booking.children ? ", " + booking.children + " child(ren)" : ""}`,
         ) +
-        detailRow("Estimated Total", `USD $${Number(booking.total_amount).toFixed(2)}`),
+        detailRow(
+          "Estimated Total",
+          `USD $${Number(booking.total_amount).toFixed(2)}`,
+        ),
     )}
     ${booking.special_requests ? para(`<strong>Special Requests:</strong> ${booking.special_requests}`) : ""}
     ${ctaButton(`${frontendUrl}/admin/bookings?status=pending_payment`, "Review Request in Admin")}
