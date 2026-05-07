@@ -322,10 +322,7 @@ export const sendWelcomeEmail = async (user) => {
           "Silver",
           "10 stays or 30 nights per year — earn 1.5 pts / $1",
         ) +
-        detailRow(
-          "Gold",
-          "25 stays or 75 nights per year — earn 2 pts / $1",
-        ),
+        detailRow("Gold", "25 stays or 75 nights per year — earn 2 pts / $1"),
     )}
     ${para("We look forward to welcoming you to New York's most vibrant address.")}
   `;

@@ -405,8 +405,7 @@ const seed = async () => {
         children: 2,
         size_sqft: 3200,
         floor_level: "Top Floor",
-        view_type:
-          "360° Panoramic — Times Square, Hudson River, Central Park",
+        view_type: "360° Panoramic — Times Square, Hudson River, Central Park",
         bed_type: "Three King Bedrooms",
         bathroom_type:
           "Three full luxury marble bathrooms, master bath with two freestanding soaking tubs, his-and-hers rain showers, and heated stone floors",
