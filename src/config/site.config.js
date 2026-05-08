@@ -12,7 +12,7 @@ export const SITE_CONFIG = {
     full: "485 7th Ave, New York, NY 10018, United States",
   },
   contact: {
-    phone: "+1 (212) 967-6400",
+    phone: "+1 (914) 432-9936",
     email: "support@fifahotel.com",
     support: "support@fifahotel.com",
     reservations: "support@fifahotel.com",
